@@ -26,6 +26,7 @@ curl -fsSL https://raw.githubusercontent.com/doctiling/releases/main/install.sh 
 
 ```sh
 brew tap doctiling/tap
+brew trust doctiling/tap        # Homebrew requires trusting third-party taps
 brew install doctiling
 brew services start doctiling   # start now + at login
 ```
@@ -107,7 +108,7 @@ Ejecuta Doctiling completamente en tu máquina: tus documentos, tu base de datos
 curl -fsSL https://raw.githubusercontent.com/doctiling/releases/main/install.sh | sh
 ```
 
-**macOS con Homebrew:** `brew tap doctiling/tap && brew install doctiling && brew services start doctiling`
+**macOS con Homebrew:** `brew tap doctiling/tap && brew trust doctiling/tap && brew install doctiling && brew services start doctiling`
 
 **Windows (PowerShell):**
 ```powershell
