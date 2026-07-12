@@ -107,5 +107,7 @@ for ($i = 0; $i -lt 60; $i++) {
 }
 if (-not $ok) { throw "The app did not come up; check $Home_\logs\doctiling.log" }
 
-Say "Done. Opening http://127.0.0.1:$Port — install it as an app from your browser."
-Start-Process "http://127.0.0.1:$Port"
+$lang = if ((Get-Culture).TwoLetterISOLanguageName -eq 'es') { 'es' } else { 'en' }
+$appUrl = "http://127.0.0.1:$Port/$lang/signin"
+Say "Done. Opening $appUrl — install it as an app from your browser."
+Start-Process $appUrl

@@ -113,6 +113,9 @@ until curl -fsS -o /dev/null "http://127.0.0.1:$PORT" 2>/dev/null; do
   sleep 1
 done
 
-say "Done. Open http://127.0.0.1:$PORT — install it as an app from your browser."
+case "${LANG:-}" in es*) APP_LOCALE="es" ;; *) APP_LOCALE="en" ;; esac
+APP_URL="http://127.0.0.1:$PORT/$APP_LOCALE/signin"
+say "Done. Open $APP_URL — install it as an app from your browser."
 say "CLI: $DOCTILING_HOME/bin/doctiling start|stop|status|update|logs (add $DOCTILING_HOME/bin to PATH)."
-if [ "$NODE_OS" = "darwin" ]; then open "http://127.0.0.1:$PORT" 2>/dev/null || true; fi
+if [ "$NODE_OS" = "darwin" ]; then open "$APP_URL" 2>/dev/null || true; fi
+command -v xdg-open >/dev/null 2>&1 && xdg-open "$APP_URL" 2>/dev/null || true
