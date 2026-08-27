@@ -17,7 +17,7 @@ New-Item -ItemType Directory -Force -Path $Home_, "$Home_\data", "$Home_\logs", 
 $NodeDir = Join-Path $Home_ "node-v$NodeVersion"
 $NodeExe = Join-Path $NodeDir 'node.exe'
 if (-not (Test-Path $NodeExe)) {
-  Say "Downloading Node $NodeVersion…"
+  Say "Downloading Node $NodeVersion..."
   $arch = if ($env:PROCESSOR_ARCHITECTURE -eq 'ARM64') { 'arm64' } else { 'x64' }
   $zip = "node-v$NodeVersion-win-$arch.zip"
   Invoke-WebRequest "https://nodejs.org/dist/v$NodeVersion/$zip" -OutFile "$Home_\$zip"
@@ -27,12 +27,12 @@ if (-not (Test-Path $NodeExe)) {
 }
 
 # --- App release --------------------------------------------------------------
-Say 'Fetching latest release…'
+Say 'Fetching latest release...'
 $release = Invoke-RestMethod "https://api.github.com/repos/$Repo/releases/latest"
 $tag = $release.tag_name
 $AppDir = Join-Path $Home_ "app-$tag"
 if (-not (Test-Path $AppDir)) {
-  Say "Downloading Doctiling $tag…"
+  Say "Downloading Doctiling $tag..."
   Invoke-WebRequest "https://github.com/$Repo/releases/download/$tag/doctiling-standalone.tar.gz" -OutFile "$Home_\app.tar.gz"
   New-Item -ItemType Directory -Force -Path $AppDir | Out-Null
   tar -xzf "$Home_\app.tar.gz" -C $AppDir
@@ -45,7 +45,7 @@ New-Item -ItemType Junction -Path $Current -Target $AppDir | Out-Null
 # --- .env: generate every key the app needs ----------------------------------
 $EnvFile = Join-Path $Home_ '.env'
 if (-not (Test-Path $EnvFile)) {
-  Say 'Generating secrets (.env)…'
+  Say 'Generating secrets (.env)...'
   $authSecret = & $NodeExe -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
   $webhookKey = & $NodeExe -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
   $vapid = & $NodeExe "$Current\scripts\self-host\generate-vapid.mjs" 2>$null
@@ -69,7 +69,7 @@ LLM_BASE_URL=http://127.0.0.1:1234/v1
 EMBEDDING_PROVIDER=local
 OPENAI_EMBED_MODEL=text-embedding-nomic-embed-text-v1.5
 
-# Optional cloud keys — leave empty to stay fully local.
+# Optional cloud keys - leave empty to stay fully local.
 # ANTHROPIC_API_KEY=
 # GEMINI_API_KEY=
 # OPENAI_API_KEY=
@@ -100,7 +100,7 @@ Register-ScheduledTask -TaskName 'Doctiling' -Action $action -Trigger $trigger -
 Start-ScheduledTask -TaskName 'Doctiling'
 Say 'Registered logon task "Doctiling".'
 
-Say "Waiting for the app on http://127.0.0.1:$Port …"
+Say "Waiting for the app on http://127.0.0.1:$Port ..."
 $ok = $false
 for ($i = 0; $i -lt 60; $i++) {
   try { Invoke-WebRequest "http://127.0.0.1:$Port" -UseBasicParsing -TimeoutSec 2 | Out-Null; $ok = $true; break } catch { Start-Sleep 1 }
@@ -109,5 +109,5 @@ if (-not $ok) { throw "The app did not come up; check $Home_\logs\doctiling.log"
 
 $lang = if ((Get-Culture).TwoLetterISOLanguageName -eq 'es') { 'es' } else { 'en' }
 $appUrl = "http://127.0.0.1:$Port/$lang/signin"
-Say "Done. Opening $appUrl — install it as an app from your browser."
+Say "Done. Opening $appUrl - install it as an app from your browser."
 Start-Process $appUrl
