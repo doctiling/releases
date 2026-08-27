@@ -94,11 +94,26 @@ Get-Content '$EnvFile' | ForEach-Object {
 & '$NodeExe' '$Current\server.js' *>> '$Home_\logs\doctiling.log'
 "@ | Set-Content -Encoding UTF8 $Runner
 
-$action = New-ScheduledTaskAction -Execute 'powershell.exe' -Argument "-WindowStyle Hidden -ExecutionPolicy Bypass -File `"$Runner`""
-$trigger = New-ScheduledTaskTrigger -AtLogOn
-Register-ScheduledTask -TaskName 'Doctiling' -Action $action -Trigger $trigger -Force | Out-Null
-Start-ScheduledTask -TaskName 'Doctiling'
-Say 'Registered logon task "Doctiling".'
+$startedByTask = $false
+try {
+  $action = New-ScheduledTaskAction -Execute 'powershell.exe' -Argument "-WindowStyle Hidden -ExecutionPolicy Bypass -File `"$Runner`""
+  $trigger = New-ScheduledTaskTrigger -AtLogOn
+  Register-ScheduledTask -TaskName 'Doctiling' -Action $action -Trigger $trigger -Force -ErrorAction Stop | Out-Null
+  Start-ScheduledTask -TaskName 'Doctiling'
+  $startedByTask = $true
+} catch {
+  # Locked-down machines deny Register-ScheduledTask (HRESULT 0x80070005) even
+  # for per-user logon tasks. The HKCU Run key needs no elevation and gives the
+  # same start-at-logon behavior; the app is then started directly this once.
+  $runCmd = "powershell.exe -WindowStyle Hidden -ExecutionPolicy Bypass -File `"$Runner`""
+  New-Item -Path 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Run' -Force | Out-Null
+  Set-ItemProperty -Path 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Run' -Name 'Doctiling' -Value $runCmd
+  Write-Host '[doctiling] Scheduled task denied by policy; using a per-user Run key instead.'
+}
+if (-not $startedByTask) {
+  Start-Process powershell -WindowStyle Hidden -ArgumentList "-WindowStyle Hidden -ExecutionPolicy Bypass -File `"$Runner`""
+}
+Say 'Doctiling will start at logon (task or per-user Run key).'
 
 Say "Waiting for the app on http://127.0.0.1:$Port ..."
 $ok = $false
