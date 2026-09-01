@@ -69,6 +69,15 @@ else
 fi
 ln -sfn "$APP_DIR" "$DOCTILING_HOME/current"
 
+# --- License ------------------------------------------------------------------
+# Proprietary, not open source. Saying so once, at install time, is the whole
+# mechanism: nobody can claim the tarball arrived without terms.
+if [ -f "$APP_DIR/LICENSE" ]; then
+  cp "$APP_DIR/LICENSE" "$DOCTILING_HOME/LICENSE"
+  say "Doctiling is proprietary software, licensed for your own internal use."
+  say "By installing it you accept $DOCTILING_HOME/LICENSE (no redistribution or resale)."
+fi
+
 # --- .env: generate every key the app needs ----------------------------------
 sh "$DOCTILING_HOME/current/scripts/self-host/setup-env.sh" "$NODE" "$DOCTILING_HOME/current" "$DOCTILING_HOME" "$PORT"
 
