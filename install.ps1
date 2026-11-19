@@ -104,6 +104,9 @@ OPENAI_EMBED_MODEL=text-embedding-nomic-embed-text-v1.5
     Add-Content $EnvFile "VAPID_PRIVATE_KEY=$($parts[1])"
   }
 }
+# An upgrade keeps the existing .env, and the app listens on its PORT.
+$envPort = Select-String -Path $EnvFile -Pattern '^PORT=(\d+)' | Select-Object -First 1
+if ($envPort) { $Port = $envPort.Matches[0].Groups[1].Value }
 
 # --- Runner + logon task -------------------------------------------------------
 $Runner = Join-Path $Home_ 'bin\doctiling-run.ps1'

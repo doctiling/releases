@@ -80,6 +80,9 @@ fi
 
 # --- .env: generate every key the app needs ----------------------------------
 sh "$DOCTILING_HOME/current/scripts/self-host/setup-env.sh" "$NODE" "$DOCTILING_HOME/current" "$DOCTILING_HOME" "$PORT"
+# An upgrade keeps the existing .env, and the app listens on its PORT.
+ENV_PORT=$(grep -m1 '^PORT=' "$DOCTILING_HOME/.env" 2>/dev/null | cut -d= -f2 || true)
+PORT="${ENV_PORT:-$PORT}"
 
 # --- CLI ----------------------------------------------------------------------
 cp "$DOCTILING_HOME/current/scripts/self-host/doctiling" "$DOCTILING_HOME/bin/doctiling" 2>/dev/null || true
