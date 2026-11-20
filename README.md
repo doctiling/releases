@@ -1,6 +1,8 @@
 # Doctiling — Self-host
 
-Run [Doctiling](https://doctiling.app) entirely on your own machine: your documents, your database, and (optionally) your own local AI. Nothing leaves your laptop.
+Run [Doctiling](https://doctiling.app) inside your own infrastructure: your documents, your database, and (optionally) your own local AI. Nothing leaves your boundary.
+
+> **License required.** Self-host is sovereign use under a **paid license** — it is not free and not open source. These installers are public so any machine can reach them, but downloading them grants no right to use the software. Terms: [`LICENSE`](LICENSE). Buy or renew a license: [doctiling.app/en#self-host](https://www.doctiling.app/en#self-host).
 
 *[Versión en español más abajo.](#doctiling--instalación-en-español)*
 
@@ -128,11 +130,17 @@ Start-Process powershell -WindowStyle Hidden -ArgumentList "-WindowStyle Hidden 
 
 Every release lists what changed and how to update: [Releases](https://github.com/doctiling/releases/releases).
 
+## License
+
+Proprietary software. Using it requires a paid Doctiling license in force, for the term and scope you contracted (instances, users), for your own internal use. No redistribution, resale, hosting it as a service for third parties, or reverse engineering. Your data stays yours: a self-host install sends none of it to Doctiling. Full terms: [`LICENSE`](LICENSE) — the same text ships in every tarball and lands at `~/.doctiling/LICENSE` on install.
+
 ---
 
 # Doctiling — instalación (en español)
 
-Ejecuta Doctiling completamente en tu máquina: tus documentos, tu base de datos y, si quieres, tu propia IA local. Nada sale de tu laptop. Funciona también en equipos Windows administrados por tu empresa: si la política niega las tareas programadas, el instalador usa la clave Run de tu usuario automáticamente.
+> **Requiere licencia.** El self-host es uso soberano con **licencia de pago** — no es gratuito ni open source. Los instaladores son públicos para que cualquier equipo los alcance, pero descargarlos no da derecho a usar el software. Términos: [`LICENSE`](LICENSE). Comprar o renovar: [doctiling.app/es#self-host](https://www.doctiling.app/es#self-host).
+
+Ejecuta Doctiling dentro de tu infraestructura: tus documentos, tu base de datos y, si quieres, tu propia IA local. Nada sale de tu frontera. Funciona también en equipos Windows administrados por tu empresa: si la política niega las tareas programadas, el instalador usa la clave Run de tu usuario automáticamente.
 
 ## Instalar
 
@@ -193,3 +201,7 @@ Get-Content "$env:USERPROFILE\.doctiling\logs\doctiling.log" -Tail 40
 2. **Después de actualizar, reinicia el proceso** — un servidor corriendo mantiene el código viejo en memoria y "el fix no funciona" hasta que lo matas y arrancas de nuevo.
 3. Si la IA no responde: verifica que LM Studio/Ollama estén sirviendo en la URL del `.env` (`curl http://127.0.0.1:1234/v1/models`).
 4. Cada release explica qué cambió y cómo actualizar: [Releases](https://github.com/doctiling/releases/releases).
+
+## Licencia
+
+Software propietario. Usarlo requiere una licencia de pago de Doctiling vigente, por el plazo y el alcance contratados (instancias, usuarios), para uso interno propio. Sin redistribución, reventa, operación como servicio para terceros ni reingeniería. Tus datos son tuyos: un self-host no los envía a Doctiling. Términos completos: [`LICENSE`](LICENSE) (en inglés) — el mismo texto viaja en cada tarball y queda en `~/.doctiling/LICENSE` al instalar.
